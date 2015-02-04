@@ -20,4 +20,14 @@ class HomeController extends BaseController {
 		return View::make('hello');
 	}
 
+	public function resume()
+	{
+		return View::make('layouts.resume');
+	}
+
+	public function portfolio()
+	{
+		return View::make('layouts.portfolio');
+	}
+
 }

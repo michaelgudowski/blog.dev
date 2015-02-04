@@ -11,7 +11,47 @@
 |
 */
 
+// Route::get(resume, 'HomeController@resume');
+
 Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+Route::get('rolldice/{guess}', function($guess){
+	
+	$min=1;
+  	$max=6;
+  $randomnumber = rand($min,$max);
+  return View::make('roll-dice')->with('randomnumber', $randomnumber)->with('guess', $guess);
+});
+
+Route::get('portfolio', 'HomeController@portfolio');
+
+Route::get('resume', 'HomeController@resume');
+
+//creates 7 routes from http://app.codeup.com/laravel/quickstart/resource-controllers.html table on page
+Route::resource('posts', 'PostsController');
+
+//test route on blog.dev/orm-test
+Route::get('orm-test', function ()
+{
+$post1 = new Post();
+//Gets the users input for title
+$post1->title = Input::get('title');
+//Hard coded into the database. Would need to use input
+$post1->body  = 'It is super easy to create a new post.';
+$post1->save();
+
+$post2 = new Post();
+$post2->title = 'Post number two';
+$post2->body  = 'The body for post number two.';
+$post2->save();
+});
+
+
+
+
+
+
+
