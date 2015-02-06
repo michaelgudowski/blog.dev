@@ -6,7 +6,7 @@
  </div>
 
  <div class="form-group{{{$errors->has('body') ? 'has-errors' : ''}}}">
- 	 {{Form::label('body', 'content:')}}
+ 	 {{Form::label('body', 'Content:')}}
  	 {{Form::text('body', Input::old('body') , array('class' => 'form-control', 'rows'=> '4'))}}
  	  	{{$errors->first('body', '<p class="help-block">:message</p>')}}
 </div>
