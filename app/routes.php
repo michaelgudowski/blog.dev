@@ -13,10 +13,7 @@
 
 // Route::get(resume, 'HomeController@resume');
 
-Route::get('/', function()
-{
-	return Redirect::action('PostsController@index');
-});
+Route::get('/', 'HomeController@home');
 
 Route::get('rolldice/{guess}', function($guess){
 	
@@ -56,9 +53,3 @@ $post2->save();
 Route::get('login', 'HomeController@showLogin');
 Route::post('login', "HomeController@doLogin");
 Route::get('logout', 'HomeController@doLogout');
-
-
-
-
-
-

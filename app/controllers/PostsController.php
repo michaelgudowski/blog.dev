@@ -8,8 +8,6 @@ class PostsController extends BaseController {
 		$this->beforeFilter('auth', array('except'=> array('index', 'show')));
 	}
 
-
-
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -148,6 +146,12 @@ class PostsController extends BaseController {
 		
 		return Redirect::action('PostsController@show', $post->id);
 		}
+	}
+
+
+	public function home()
+	{
+		return View::make('home');
 	}
 
 	

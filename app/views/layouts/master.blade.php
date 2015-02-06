@@ -28,8 +28,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/index">Home</a>
-                    </li>
+                        <a href="{{{ action('HomeController@home') }}}">Home</a>
                     <li>
                         <a href="about.html">About</a>
                     </li>
