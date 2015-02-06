@@ -2,6 +2,14 @@
 
 class PostsController extends BaseController {
 
+	public function __contruct(){
+		parent::__contruct();
+
+		$this->beforeFilter('auth', array('except'=> array('index', 'show')));
+	}
+
+
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -9,8 +17,15 @@ class PostsController extends BaseController {
 	 */
 	public function index()
 	{
+		$query = Post::with('user');
 
-		$posts = Post::paginate(4);
+		if(Input::has('search')){
+			$search = Input::get('search');
+			// searching in the title where something is like (defined by user)
+			$query->where('title', 'like', "%$search%")->orWhere('body', 'like', "%$search%");
+		}
+		$posts = $query->orderBy('created_at','desc')->paginate(4);
+
 		return View::make('posts.index')->with('posts',$posts);	
 	}
 
@@ -35,6 +50,9 @@ class PostsController extends BaseController {
 	public function store()
 	{
 		$post = new Post();
+		// $post->user_id = Auth::id();
+
+
 		return $this->savePost($post);
 	}
 
@@ -87,7 +105,16 @@ class PostsController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		return "Navigating to http://blog.dev/posts/destroy($id) should let the user destroy a blog post with the id they specified.";
+		try{
+			$post = Post::findOrfail($id);
+		} catch (ModelNotFoundException $e){
+			Log::warning("User made a Bad PostController request", array(
+				'id' => $id));
+			App::abort(404);
+		}
+		$post->delete();
+		Session::flash("sucessMessage", 'Post Deleted!');
+		return Redirect::action('PostsController@index');
 	}
 
 	protected function savePost($post)
@@ -103,10 +130,25 @@ class PostsController extends BaseController {
 		else{
 			Session::flash('successMessage', 'Post successfully saved!');
 			$post->title = Input::get('title');
-			$post->body = Input::get('content');
+			$post->body = Input::get('body');
+			$post->user_id = Auth::id();
 			$post->save();
 			return Redirect::action('PostsController@show', $post->id);
 		}
 
+		if (Input::hasFile('image')){
+			$uploadPath = public_path() . '/uploads';
+			$fileName = $post->id . '-' . Input::file('image')->getClientOriginalName();
+
+			Input::file('image')->move($uploadPath, $fileName);
+
+			$post->img_url = '/uploads/' . $fileName;
+
+			$post->save();
+		
+		return Redirect::action('PostsController@show', $post->id);
+		}
 	}
+
+	
 }

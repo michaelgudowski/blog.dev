@@ -10,7 +10,7 @@ class Post extends BaseModel
     //Go inside of store on postcontroller.php
     public static $rules = array(
     	'title' => 'required|max:100',
-    	'content' => 'required'
+    	'body' => 'required'
     	);
 
     public function getCreatedAtAttribute($value){
@@ -25,6 +25,20 @@ class Post extends BaseModel
 
     public function setTitleAttribute($value){
     	$this->attributes['title'] = ucfirst($value);
+    }
+    public function user(){
+        return $this->belongsto('User');
+    }
+
+    public function uploadFile($file){
+        $uploadPath = public_path() . '/uploads';
+        $fileName = $this->id . '-' . $file->getClientOriginalName();
+
+        Input::file('image')->move($uploadPath, $fileName);
+
+        $this->img_url = '/uploads/' . $fileName;
+
+        $this->save();
     }
 
 }

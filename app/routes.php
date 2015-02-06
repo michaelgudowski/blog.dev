@@ -15,7 +15,7 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return Redirect::action('PostsController@index');
 });
 
 Route::get('rolldice/{guess}', function($guess){
@@ -49,6 +49,13 @@ $post2->body  = 'The body for post number two.';
 $post2->save();
 });
 
+// Route::get('/login', function() {
+// 	return View::make('login');
+// });
+
+Route::get('login', 'HomeController@showLogin');
+Route::post('login', "HomeController@doLogin");
+Route::get('logout', 'HomeController@doLogout');
 
 
 
